@@ -1,0 +1,34 @@
+# forest.toml — Work-Forest manifest
+# Declares repos, their roles, and relationships in this workspace.
+# Docs: https://github.com/user/work-forest
+
+[forest]
+name = "my-feature"
+description = "Feature description"
+branch_pattern = "feat/{name}"
+
+# Repos: each [repos.NAME] section registers a repository
+# Fields:
+#   url            - Git remote URL
+#   path           - Directory relative to forest root
+#   role           - backend, frontend, e2e, infra, etc.
+#   default_branch - main or master
+#   tags           - Optional tags for filtering
+
+# [repos.backend]
+# url = "git@github.com:org/backend.git"
+# path = "backend"
+# role = "backend"
+# default_branch = "master"
+
+# [repos.frontend]
+# url = "git@github.com:org/frontend.git"
+# path = "frontend"
+# role = "frontend"
+# default_branch = "main"
+
+# Relationships between repos
+# [relationships]
+# api_consumers = [
+#   { provider = "backend", consumer = "frontend", contract = "REST API" },
+# ]

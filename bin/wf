@@ -1,0 +1,95 @@
+#!/usr/bin/env zsh
+# wf — Work-Forest CLI dispatcher
+# Thin wrapper that sources libs and dispatches subcommands
+
+set -eo pipefail
+
+# Resolve script location
+WF_ROOT="${0:A:h:h}"
+
+# Source libraries
+source "$WF_ROOT/lib/_wf_toml.zsh"
+source "$WF_ROOT/lib/_wf_core.zsh"
+source "$WF_ROOT/lib/_wf_git.zsh"
+source "$WF_ROOT/lib/_wf_forest.zsh"
+source "$WF_ROOT/lib/_wf_agent.zsh"
+
+_wf_cmd_help() {
+  print -P "%F{cyan}work-forest%f v$WF_VERSION — Multi-repo feature workspace tool\n"
+  print -P "%F{white}USAGE:%f wf <command> [options]\n"
+  print -P "%F{white}FOREST MANAGEMENT:%f"
+  print -P "  %F{green}init%f [--name NAME] [DIR]         Initialize forest.toml (auto-detect repos)"
+  print -P "  %F{green}clone%f <url> [--as N] [--role R]  Clone repo and register in manifest"
+  print -P "  %F{green}add%f [DIR] [--role ROLE]           Register existing repo in manifest"
+  print -P "  %F{green}remove%f <name>                     Remove repo from manifest (keeps files)"
+  print -P "  %F{green}list%f [--json]                     List repos with status"
+  print -P ""
+  print -P "%F{white}GIT OPERATIONS:%f"
+  print -P "  %F{green}status%f [--repo NAME]              Branch, dirty/clean, ahead/behind"
+  print -P "  %F{green}pull%f [--rebase] [--repo NAME]    Pull across all repos"
+  print -P "  %F{green}checkout%f [-b] <branch> [--repo N] Checkout or create branch"
+  print -P "  %F{green}diff%f [--repo NAME]                Diff summary"
+  print -P "  %F{green}rebase%f [--repo NAME]              Rebase onto default branch"
+  print -P "  %F{green}stash%f [push|pop] [--repo NAME]   Stash changes"
+  print -P "  %F{green}log%f [N] [--repo NAME]            Last N commits (default 3)"
+  print -P "  %F{green}fetch%f [--repo NAME]               Fetch all remotes"
+  print -P "  %F{green}exec%f <command...>                 Run command in each repo"
+  print -P ""
+  print -P "%F{white}AI AGENT INTEGRATION:%f"
+  print -P "  %F{green}context%f                           Generate .wf/context.md state snapshot"
+  print -P "  %F{green}claude-md%f                         Generate forest-level CLAUDE.md"
+  print -P "  %F{green}agent%f [claude|cursor|codex]       Launch AI agent with forest context"
+  print -P "  %F{green}open%f [cursor|code|idea]           Open forest in IDE"
+  print -P ""
+  print -P "%F{white}OTHER:%f"
+  print -P "  %F{green}help%f                              Show this help"
+  print -P "  %F{green}version%f                           Show version"
+}
+
+_wf_cmd_version() {
+  echo "work-forest v$WF_VERSION"
+}
+
+# Main dispatcher
+_wf_dispatch() {
+  local cmd="${1:-help}"
+  shift 2>/dev/null
+
+  case "$cmd" in
+    # Forest management
+    init)       _wf_cmd_init "$@" ;;
+    clone)      _wf_cmd_clone "$@" ;;
+    add)        _wf_cmd_add "$@" ;;
+    remove)     _wf_cmd_remove "$@" ;;
+    list|ls)    _wf_cmd_list "$@" ;;
+
+    # Git operations
+    status|st)  _wf_cmd_status "$@" ;;
+    pull)       _wf_cmd_pull "$@" ;;
+    checkout|co) _wf_cmd_checkout "$@" ;;
+    diff)       _wf_cmd_diff "$@" ;;
+    rebase)     _wf_cmd_rebase "$@" ;;
+    stash)      _wf_cmd_stash "$@" ;;
+    log)        _wf_cmd_log "$@" ;;
+    fetch)      _wf_cmd_fetch "$@" ;;
+    exec)       _wf_cmd_exec "$@" ;;
+
+    # AI agent
+    context)    _wf_cmd_context ;;
+    claude-md)  _wf_cmd_claude_md ;;
+    agent)      _wf_cmd_agent "$@" ;;
+    open)       _wf_cmd_open "$@" ;;
+
+    # Other
+    help|--help|-h) _wf_cmd_help ;;
+    version|--version|-v) _wf_cmd_version ;;
+
+    *)
+      echo "Unknown command: $cmd"
+      echo "Run 'wf help' for usage."
+      return 1
+      ;;
+  esac
+}
+
+_wf_dispatch "$@"

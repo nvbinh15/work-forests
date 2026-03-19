@@ -1,0 +1,20 @@
+# CLAUDE.md — Forest: {{FOREST_NAME}}
+
+{{DESCRIPTION}}
+
+This is a multi-repo workspace managed by work-forest.
+Each subdirectory is an independent git repository.
+
+## Repositories
+
+{{REPOS_SECTION}}
+
+## Cross-Repo Rules
+
+- When making API changes, check all consumer repos for breaking changes.
+- Run `wf status` to verify all repos are on the correct feature branch before committing.
+- Use `wf context` to regenerate the state snapshot after significant changes.
+
+## Current State
+
+Run `wf context` for a detailed state snapshot, or `wf status` for a quick overview.

@@ -1,0 +1,98 @@
+#compdef wf
+
+_wf() {
+  local -a commands
+  commands=(
+    'init:Initialize forest.toml (auto-detect repos)'
+    'clone:Clone repo and register in manifest'
+    'add:Register existing repo in manifest'
+    'remove:Remove repo from manifest'
+    'list:List repos with status'
+    'status:Show branch and status per repo'
+    'pull:Pull across all repos'
+    'checkout:Checkout or create branch'
+    'diff:Show diff summary'
+    'rebase:Rebase onto default branch'
+    'stash:Stash changes'
+    'log:Show recent commits'
+    'fetch:Fetch all remotes'
+    'exec:Run command in each repo'
+    'context:Generate state snapshot'
+    'claude-md:Generate forest-level CLAUDE.md'
+    'agent:Launch AI agent with forest context'
+    'open:Open forest in IDE'
+    'help:Show help'
+    'version:Show version'
+  )
+
+  _arguments -C \
+    '1:command:->cmd' \
+    '*::arg:->args'
+
+  case "$state" in
+    cmd)
+      _describe -t commands 'wf command' commands
+      ;;
+    args)
+      case "$words[1]" in
+        status|pull|diff|rebase|stash|log|fetch)
+          _arguments \
+            '--repo[Target specific repo]:repo name:_wf_repos'
+          ;;
+        checkout)
+          _arguments \
+            '-b[Create new branch]' \
+            '--repo[Target specific repo]:repo name:_wf_repos' \
+            ':branch name:'
+          ;;
+        init)
+          _arguments \
+            '--name[Forest name]:name:' \
+            ':directory:_directories'
+          ;;
+        clone)
+          _arguments \
+            '--as[Local name]:name:' \
+            '--role[Repo role]:role:(backend frontend e2e infra)' \
+            ':url:'
+          ;;
+        add)
+          _arguments \
+            '--role[Repo role]:role:(backend frontend e2e infra)' \
+            ':directory:_directories'
+          ;;
+        remove)
+          _arguments ':repo name:_wf_repos'
+          ;;
+        list)
+          _arguments '--json[Output as JSON]'
+          ;;
+        agent)
+          _arguments \
+            '1:agent type:(claude cursor codex)' \
+            '--prompt[Prompt text]:prompt:' \
+            '--resume[Resume last session]'
+          ;;
+        open)
+          _arguments '1:editor:(cursor code idea)'
+          ;;
+        stash)
+          _arguments '1:action:(push pop)'
+          ;;
+      esac
+      ;;
+  esac
+}
+
+# Complete repo names from forest.toml
+_wf_repos() {
+  local forest_root
+  forest_root=$(_wf_resolve_forest 2>/dev/null)
+  if [[ -f "$forest_root/forest.toml" ]]; then
+    local -a repos
+    repos=("${(@f)$(_wf_toml_repos "$forest_root/forest.toml")}")
+    _describe 'repo' repos
+  fi
+}
+
+_wf "$@"
