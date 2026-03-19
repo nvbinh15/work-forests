@@ -342,7 +342,7 @@ _wf_generate_cursorrules() {
 
       # Include cursor rules from repo if they exist
       local repo_rules=""
-      for rfile in "$repo_path/.cursorrules" "$repo_path/.cursor/rules/"*.mdc; do
+      for rfile in "$repo_path/.cursorrules" "$repo_path/.cursor/rules/"*.mdc(N); do
         if [[ -f "$rfile" ]]; then
           repo_rules="$rfile"
           break

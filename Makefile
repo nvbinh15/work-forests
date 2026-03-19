@@ -29,4 +29,11 @@ test: ## Run tests
 	@echo "Running tests..."
 	@zsh tests/test_toml.zsh
 	@zsh tests/test_core.zsh
-	@echo "All tests passed."
+	@zsh tests/test_git.zsh
+	@zsh tests/test_forest.zsh
+	@zsh tests/test_agent.zsh
+	@zsh tests/test_integration.zsh
+	@echo ""
+	@echo "═══════════════════════════"
+	@echo "  All test suites passed!"
+	@echo "═══════════════════════════"

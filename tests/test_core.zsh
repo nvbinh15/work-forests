@@ -22,7 +22,7 @@ done
 
 # Test: resolve forest without manifest (fallback)
 echo "Test: _wf_resolve_forest without forest.toml..."
-result=$(_wf_resolve_forest "$FOREST" || true)
+result=$(_wf_resolve_forest "$FOREST")
 [[ "$result" = "$FOREST" ]] || { echo "FAIL: got '$result'"; exit 1; }
 echo "  PASS"
 

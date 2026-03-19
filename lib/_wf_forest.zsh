@@ -22,7 +22,8 @@ _wf_cmd_init() {
 
   # Auto-detect git repos
   local repos=()
-  for sub in "$dir"/*/; do
+  local sub
+  for sub in "$dir"/*(N/); do
     [[ -d "$sub/.git" ]] || continue
     repos+=($(basename "$sub"))
   done
@@ -273,7 +274,7 @@ _wf_cmd_list() {
       repo_entries+=("${repo_name}|${rp}|${rr}")
     done
   else
-    for repo in "$forest_root"/*/; do
+    for repo in "$forest_root"/*(N/); do
       [[ -d "$repo/.git" ]] || continue
       n=$(basename "$repo")
       repo_entries+=("${n}|${n}|")

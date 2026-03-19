@@ -20,7 +20,7 @@ _wf_resolve_forest() {
 
   # Fallback: current directory (scan for .git subdirs)
   echo "${1:-$PWD}"
-  return 1
+  return 0
 }
 
 # Get default branch for current repo (master or main)
@@ -87,7 +87,7 @@ _wf_foreach() {
     done
   else
     # Fallback: scan subdirs
-    for repo in "$forest_root"/*/; do
+    for repo in "$forest_root"/*(N/); do
       [[ -d "$repo/.git" ]] || continue
       local name=$(basename "$repo")
       [[ -n "$filter_repo" && "$filter_repo" != "$name" ]] && continue
@@ -126,7 +126,7 @@ _wf_repo_paths() {
       echo "$forest_root/$repo_path"
     done
   else
-    for repo in "$forest_root"/*/; do
+    for repo in "$forest_root"/*(N/); do
       [[ -d "$repo/.git" ]] || continue
       echo "${repo%/}"
     done
@@ -141,7 +141,7 @@ _wf_repo_names() {
   if [[ -f "$forest_root/forest.toml" ]]; then
     _wf_toml_repos "$forest_root/forest.toml"
   else
-    for repo in "$forest_root"/*/; do
+    for repo in "$forest_root"/*(N/); do
       [[ -d "$repo/.git" ]] || continue
       basename "${repo%/}"
     done

@@ -83,5 +83,5 @@ _wf_toml_repo_field() {
 # Usage: _wf_toml_relationships <file>
 _wf_toml_relationships() {
   local file="$1"
-  _wf_toml_parse "$file" | grep '^relationships\.'
+  _wf_toml_parse "$file" | grep '^relationships\.' || true
 }
