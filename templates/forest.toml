@@ -1,6 +1,6 @@
 # forest.toml — Work-Forest manifest
 # Declares repos, their roles, and relationships in this workspace.
-# Docs: https://github.com/user/work-forest
+# Docs: https://github.com/nvbinh15/work-forests
 
 [forest]
 name = "my-feature"

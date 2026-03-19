@@ -11,7 +11,7 @@ Multi-repo feature workspace tool. When a feature spans multiple repos (backend 
 
 ```bash
 # Install
-git clone https://github.com/user/work-forest.git ~/.oh-my-zsh/custom/plugins/work-forest
+git clone https://github.com/nvbinh15/work-forests.git ~/.oh-my-zsh/custom/plugins/work-forest
 # Add to .zshrc: plugins=(... work-forest)
 
 # Or manual install
@@ -40,7 +40,7 @@ wf context                   # Generate state snapshot for agents
 ### Oh-my-zsh plugin (recommended)
 
 ```bash
-git clone https://github.com/user/work-forest.git \
+git clone https://github.com/nvbinh15/work-forests.git \
   ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/work-forest
 ```
 
@@ -59,7 +59,7 @@ source /path/to/work-forest/work-forest.plugin.zsh
 ### Homebrew
 
 ```bash
-brew install user/tap/work-forest
+brew install nvbinh15/tap/work-forest
 ```
 
 ## Commands
